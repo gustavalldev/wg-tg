@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  # WireGuard Manager API
+  wg-manager-api:
+    build: ./wireguard-manager/api
+    container_name: wg-manager-api
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./wireguard-manager/scripts:/app/scripts
+      - /etc/wireguard:/etc/wireguard:ro
+      - /var/lib/wireguard:/var/lib/wireguard
+    environment:
+      - NODE_ENV=production
+    restart: unless-stopped
+
+  # Telegram Bot
+  telegram-bot:
+    build: ./bot
+    container_name: telegram-bot
+    depends_on:
+      - wg-manager-api
+    environment:
+      - TELEGRAM_TOKEN=${TELEGRAM_TOKEN}
+      - WG_API_URL=http://wg-manager-api:3000
+    restart: unless-stopped
+
+  # Admin Panel
+  admin-panel:
+    build:
+      context: ./admin-panel
+      args:
+        REACT_APP_ADMIN_USERNAME: ${ADMIN_USERNAME:-admin}
+        REACT_APP_ADMIN_PASSWORD: ${ADMIN_PASSWORD:-admin123}
+        REACT_APP_API_URL: http://localhost:3000
+    container_name: admin-panel
+    ports:
+      - "3001:3000"
+    depends_on:
+      - wg-manager-api
+    environment:
+      - REACT_APP_API_URL=http://localhost:3000
+      - REACT_APP_ADMIN_USERNAME=${ADMIN_USERNAME}
+      - REACT_APP_ADMIN_PASSWORD=${ADMIN_PASSWORD}
+    restart: unless-stopped 
