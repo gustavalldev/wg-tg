@@ -20,31 +20,32 @@ const Login = ({ onLogin }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
     if (!credentials.username || !credentials.password) {
       setError('Заполните все поля');
       return;
     }
-
     setLoading(true);
     setError('');
-
-    // Простая проверка (в реальном проекте лучше использовать API)
-    const correctUsername = process.env.REACT_APP_ADMIN_USERNAME || 'admin';
-    const correctPassword = process.env.REACT_APP_ADMIN_PASSWORD || 'admin123';
-
-    // Имитация задержки для UX
-    setTimeout(() => {
-      if (credentials.username === correctUsername && credentials.password === correctPassword) {
-        // Сохраняем сессию
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/admin/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          username: credentials.username,
+          password: credentials.password
+        })
+      });
+      if (response.ok) {
         localStorage.setItem('adminAuthenticated', 'true');
         localStorage.setItem('adminUsername', credentials.username);
         onLogin();
       } else {
         setError('Неверный логин или пароль');
       }
-      setLoading(false);
-    }, 500);
+    } catch (err) {
+      setError('Ошибка соединения с сервером');
+    }
+    setLoading(false);
   };
 
   return (
@@ -126,10 +127,6 @@ const Login = ({ onLogin }) => {
               )}
             </button>
           </form>
-
-          <div className="mt-6 text-center text-sm text-gray-500">
-            <p>По умолчанию: admin / admin123</p>
-          </div>
         </div>
       </div>
     </div>
