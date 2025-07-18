@@ -2,16 +2,14 @@ const express = require('express');
 const { exec } = require('child_process');
 const path = require('path');
 const fs = require('fs');
-const cors = require('cors');
+
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(express.json());
-app.use(cors({
-    origin: 'http://45.87.247.206:8080'
-  }));
+
 
 // Путь к скрипту
 const WG_SCRIPT = '/app/scripts/wg-manager.sh';
