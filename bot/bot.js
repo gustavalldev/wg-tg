@@ -121,3 +121,4 @@ function handleTelegramError(err, ctx) {
         console.error('Ошибка Telegram:', err.message);
     }
 }
+bot.launch();
