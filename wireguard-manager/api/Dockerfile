@@ -6,7 +6,7 @@ WORKDIR /app
 RUN apk add --no-cache bash jq
 
 # Копируем package.json и устанавливаем зависимости
-COPY package*.json ./
+COPY api/package*.json ./
 RUN npm ci --only=production
 
 # Копируем код приложения
