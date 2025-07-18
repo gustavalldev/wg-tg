@@ -12,6 +12,9 @@ RUN npm ci --only=production
 # Копируем код приложения
 COPY . .
 
+# Копируем скрипты WireGuard
+COPY ../scripts ./scripts
+
 EXPOSE 3000
 
-CMD ["node", "server.js"] 
+CMD ["node", "server.js"]
