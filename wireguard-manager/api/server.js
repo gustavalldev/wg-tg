@@ -8,6 +8,9 @@ const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(express.json());
+app.use(cors({
+    origin: 'http://45.87.247.206:8080'
+  }));
 
 // Путь к скрипту
 const WG_SCRIPT = '/app/scripts/wg-manager.sh';
