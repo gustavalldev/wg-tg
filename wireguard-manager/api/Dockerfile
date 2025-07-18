@@ -10,10 +10,10 @@ COPY api/package*.json ./
 RUN npm ci --only=production
 
 # Копируем код приложения
-COPY . .
+COPY api/. .
 
 # Копируем скрипты WireGuard
-COPY ../scripts ./scripts
+COPY scripts ./scripts
 
 EXPOSE 3000
 
