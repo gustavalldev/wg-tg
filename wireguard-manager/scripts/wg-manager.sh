@@ -21,8 +21,9 @@ create_peer() {
     # Создаём конфиг для клиента
     local client_config="[Interface]
 PrivateKey = $private_key
-Address = $ip/32
-DNS = 1.1.1.1
+Address = $ip/24
+DNS = 8.8.8.8
+MTU = 1280
 
 [Peer]
 PublicKey = $(wg show $WG_INTERFACE public-key)
@@ -82,8 +83,9 @@ get_peer_config() {
         
         echo "[Interface]
 PrivateKey = $private_key
-Address = $ip/32
-DNS = 1.1.1.1
+Address = $ip/24
+DNS = 8.8.8.8
+MTU = 1280
 
 [Peer]
 PublicKey = $(wg show $WG_INTERFACE public-key)
