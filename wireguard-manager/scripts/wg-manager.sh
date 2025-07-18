@@ -55,9 +55,12 @@ remove_peer() {
     if [ -f "$WG_DATA_DIR/$name.json" ]; then
         local public_key=$(jq -r '.public_key' "$WG_DATA_DIR/$name.json")
         
-        # Удаляем peer из конфига (от # $name до следующего [Peer] или конца файла)
-        sed -i "/# $name/,/\[Peer\]/ { /\[Peer\]/!d }" "$WG_CONFIG"
-        sed -i "/# $name/d" "$WG_CONFIG"
+        # Удаляем peer из конфига (от # $name до следующего [Peer] или конца файла, включая [Peer])
+        awk -v name="$name" '
+        BEGIN {del=0}
+        /^\[Peer\]/ {if(del){del=0}}
+        /# " name "$/ {del=1}
+        !del' "$WG_CONFIG" > "$WG_CONFIG.tmp" && mv "$WG_CONFIG.tmp" "$WG_CONFIG"
         
         # Удаляем peer из WireGuard
         wg set $WG_INTERFACE peer "$public_key" remove
