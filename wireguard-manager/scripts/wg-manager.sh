@@ -12,8 +12,6 @@ create_peer() {
     local name=$1
     local ip=$2
     
-    echo "Создаю peer: $name с IP: $ip"
-    
     # Генерируем ключи
     local private_key=$(wg genkey)
     local public_key=$(echo "$private_key" | wg pubkey)
@@ -27,7 +25,7 @@ MTU = 1280
 
 [Peer]
 PublicKey = $(wg show $WG_INTERFACE public-key)
-Endpoint = $(hostname -I | awk '{print $1}'):51820
+Endpoint = 109.107.170.233:51820
 AllowedIPs = 0.0.0.0/0
 PersistentKeepalive = 25"
     
@@ -89,7 +87,7 @@ MTU = 1280
 
 [Peer]
 PublicKey = $(wg show $WG_INTERFACE public-key)
-Endpoint = $(hostname -I | awk '{print $1}'):51820
+Endpoint = 109.107.170.233:51820
 AllowedIPs = 0.0.0.0/0
 PersistentKeepalive = 25"
     else
