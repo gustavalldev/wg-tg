@@ -1,3 +1,27 @@
+require('dotenv').config();
+const { Telegraf } = require('telegraf');
+const axios = require('axios');
+
+const bot = new Telegraf(process.env.TELEGRAM_TOKEN);
+const WG_API_URL = process.env.WG_API_URL || 'http://localhost:3000';
+
+// Простая база пользователей (в памяти, для MVP)
+const users = new Map();
+
+// Генерация IP адреса для нового peer
+function generateIP() {
+    // Начинаем с 10.8.0.2 (10.8.0.1 - сервер)
+    const baseIP = 2;
+    const usedIPs = Array.from(users.values());
+    for (let i = baseIP; i <= 254; i++) {
+        const ip = `10.8.0.${i}`;
+        if (!usedIPs.includes(ip)) {
+            return ip;
+        }
+    }
+    throw new Error('Нет свободных IP адресов');
+}
+
 // /start
 bot.start(async (ctx) => {
     try {
