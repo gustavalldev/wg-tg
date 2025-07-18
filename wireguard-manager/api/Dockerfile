@@ -3,7 +3,7 @@ FROM node:18-alpine
 WORKDIR /app
 
 # Устанавливаем необходимые пакеты
-RUN apk add --no-cache bash jq
+RUN apk add --no-cache bash jq wireguard-tools
 
 # Копируем package.json и устанавливаем зависимости
 COPY api/package*.json ./
