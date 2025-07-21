@@ -2,10 +2,17 @@ const express = require('express');
 const { exec } = require('child_process');
 const path = require('path');
 const fs = require('fs');
+const cors = require('cors');
 
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// Добавляем CORS для админ-панели
+app.use(cors({
+  origin: 'http://45.87.247.206:8080',
+  credentials: true
+}));
 
 // Middleware
 app.use(express.json());
