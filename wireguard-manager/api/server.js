@@ -118,6 +118,19 @@ app.get('/api/peers', async (req, res) => {
     }
 });
 
+// Эндпоинт для логина администратора
+app.post('/api/admin/login', (req, res) => {
+    const { username, password } = req.body;
+    if (
+        username === process.env.ADMIN_USERNAME &&
+        password === process.env.ADMIN_PASSWORD
+    ) {
+        return res.json({ success: true });
+    } else {
+        return res.status(401).json({ success: false, message: 'Неверный логин или пароль' });
+    }
+});
+
 // Проверка здоровья API
 app.get('/health', (req, res) => {
     res.json({ status: 'OK', timestamp: new Date().toISOString() });
