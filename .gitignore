@@ -51,4 +51,4 @@ coverage/
 tmp/
 temp/ 
 
-.md
+*.md
